@@ -1,10 +1,11 @@
-from dataclasses import dataclass
 from typing import Optional
 
+import pydantic
 
-@dataclass(frozen=True, unsafe_hash=True)
-class TokenInfo:
+
+class TokenInfo(pydantic.BaseModel):
     name: str
+    currency_against: str = '$'
     ticker: Optional[str] = None
     address: Optional[str] = None
     holders: Optional[int] = None

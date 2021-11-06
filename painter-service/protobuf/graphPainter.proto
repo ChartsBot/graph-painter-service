@@ -1,0 +1,28 @@
+//#service-request-reply
+syntax = "proto3";
+
+// The file handler service definition.
+service GraphPainterService {
+  // Sends a greeting
+  rpc Greet (SayHelloMessage) returns (SayHelloMessage) {}
+
+  rpc PaintCandlestick (ChartRequest) returns (ChartResponse) {}
+
+  rpc PaintChart (ChartRequest) returns (ChartResponse) {}
+
+}
+
+message ChartRequest {
+  string datas = 1;
+  string tokenInfo = 2;
+  string options = 3;
+}
+
+message ChartResponse {
+  bytes image = 1;
+}
+
+message SayHelloMessage {
+  string message = 1;
+}
+

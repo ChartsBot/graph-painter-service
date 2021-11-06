@@ -92,6 +92,8 @@ class AbsCollection(pydantic.BaseModel, ABC):
 
 # noinspection SpellCheckingInspection
 class CollectionSingleTradePoint(AbsCollection, pydantic.BaseModel):
+    """Represents a collection of single trade points.
+    Adds easy way to access relevant value"""
     coll: Optional[List[SingleTradePoint]] = None
 
     def __init__(self, **data: Any):
@@ -133,7 +135,9 @@ class CollectionSingleTradePoint(AbsCollection, pydantic.BaseModel):
 
 
 # noinspection SpellCheckingInspection
-class CollectionOhcl(AbsCollection):
+class CollectionOhcl(AbsCollection, pydantic.BaseModel):
+    """Represents a collection of Ohcls.
+    Adds easy way to access relevant value"""
     coll: Optional[List[OhclTradePoint]] = None
 
     def __init__(self, **data: Any):

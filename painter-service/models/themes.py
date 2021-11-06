@@ -2,13 +2,14 @@ from abc import ABC
 from dataclasses import dataclass
 from typing import List, Tuple
 
+import PIL
 import pydantic
 from PIL import ImageFont
 
 
 @dataclass(frozen=True)
 class GraphTheme(ABC):
-    chain_theme: ChainTheme
+    # chain_theme: ChainTheme
     upper_barrier_img_color: Tuple[int, int, int]
     upper_barrier_txt_color: Tuple[int, int, int]
     plot_bgcolor: str
@@ -18,6 +19,9 @@ class GraphTheme(ABC):
     upper_part_font_size = 40
     watermark_color: str = 'white'
     upper_part_font = ImageFont.truetype("DejaVuSans.ttf", upper_part_font_size, encoding="unic")
+    # used to paint the border of the images if higher or lower values
+    increase_color_img_border: str = '#013220'  # that's some green
+    decrease_color_img_border: str = '#3f0000'  # that's some red
 
 
 @dataclass(frozen=True)
