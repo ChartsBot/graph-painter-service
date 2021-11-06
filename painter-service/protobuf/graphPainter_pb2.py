@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x12graphPainter.proto\"A\n\x0c\x43hartRequest\x12\r\n\x05\x64\x61tas\x18\x01 \x01(\t\x12\x11\n\ttokenInfo\x18\x02 \x01(\t\x12\x0f\n\x07options\x18\x03 \x01(\t\"\x1e\n\rChartResponse\x12\r\n\x05image\x18\x01 \x01(\x0c\"\"\n\x0fSayHelloMessage\x12\x0f\n\x07message\x18\x01 \x01(\t2\xa8\x01\n\x13GraphPainterService\x12-\n\x05Greet\x12\x10.SayHelloMessage\x1a\x10.SayHelloMessage\"\x00\x12\x33\n\x10PaintCandlestick\x12\r.ChartRequest\x1a\x0e.ChartResponse\"\x00\x12-\n\nPaintChart\x12\r.ChartRequest\x1a\x0e.ChartResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x12graphPainter.proto\"A\n\x0c\x43hartRequest\x12\r\n\x05\x64\x61tas\x18\x01 \x01(\t\x12\x11\n\ttokenInfo\x18\x02 \x01(\t\x12\x0f\n\x07options\x18\x03 \x01(\t\"\x1e\n\rChartResponse\x12\r\n\x05image\x18\x01 \x01(\x0c\"$\n\x11SayHelloGPMessage\x12\x0f\n\x07message\x18\x01 \x01(\t2\xae\x01\n\x13GraphPainterService\x12\x33\n\x07GreetGP\x12\x12.SayHelloGPMessage\x1a\x12.SayHelloGPMessage\"\x00\x12\x33\n\x10PaintCandlestick\x12\r.ChartRequest\x1a\x0e.ChartResponse\"\x00\x12-\n\nPaintChart\x12\r.ChartRequest\x1a\x0e.ChartResponse\"\x00\x62\x06proto3'
 )
 
 
@@ -103,16 +103,16 @@ _CHARTRESPONSE = _descriptor.Descriptor(
 )
 
 
-_SAYHELLOMESSAGE = _descriptor.Descriptor(
-  name='SayHelloMessage',
-  full_name='SayHelloMessage',
+_SAYHELLOGPMESSAGE = _descriptor.Descriptor(
+  name='SayHelloGPMessage',
+  full_name='SayHelloGPMessage',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='message', full_name='SayHelloMessage.message', index=0,
+      name='message', full_name='SayHelloGPMessage.message', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -131,12 +131,12 @@ _SAYHELLOMESSAGE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=121,
-  serialized_end=155,
+  serialized_end=157,
 )
 
 DESCRIPTOR.message_types_by_name['ChartRequest'] = _CHARTREQUEST
 DESCRIPTOR.message_types_by_name['ChartResponse'] = _CHARTRESPONSE
-DESCRIPTOR.message_types_by_name['SayHelloMessage'] = _SAYHELLOMESSAGE
+DESCRIPTOR.message_types_by_name['SayHelloGPMessage'] = _SAYHELLOGPMESSAGE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 ChartRequest = _reflection.GeneratedProtocolMessageType('ChartRequest', (_message.Message,), {
@@ -153,12 +153,12 @@ ChartResponse = _reflection.GeneratedProtocolMessageType('ChartResponse', (_mess
   })
 _sym_db.RegisterMessage(ChartResponse)
 
-SayHelloMessage = _reflection.GeneratedProtocolMessageType('SayHelloMessage', (_message.Message,), {
-  'DESCRIPTOR' : _SAYHELLOMESSAGE,
+SayHelloGPMessage = _reflection.GeneratedProtocolMessageType('SayHelloGPMessage', (_message.Message,), {
+  'DESCRIPTOR' : _SAYHELLOGPMESSAGE,
   '__module__' : 'graphPainter_pb2'
-  # @@protoc_insertion_point(class_scope:SayHelloMessage)
+  # @@protoc_insertion_point(class_scope:SayHelloGPMessage)
   })
-_sym_db.RegisterMessage(SayHelloMessage)
+_sym_db.RegisterMessage(SayHelloGPMessage)
 
 
 
@@ -169,16 +169,16 @@ _GRAPHPAINTERSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=158,
-  serialized_end=326,
+  serialized_start=160,
+  serialized_end=334,
   methods=[
   _descriptor.MethodDescriptor(
-    name='Greet',
-    full_name='GraphPainterService.Greet',
+    name='GreetGP',
+    full_name='GraphPainterService.GreetGP',
     index=0,
     containing_service=None,
-    input_type=_SAYHELLOMESSAGE,
-    output_type=_SAYHELLOMESSAGE,
+    input_type=_SAYHELLOGPMESSAGE,
+    output_type=_SAYHELLOGPMESSAGE,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

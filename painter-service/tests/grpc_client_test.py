@@ -17,6 +17,7 @@ SECRETS_PATH = os.environ.get('SECRETS_PATH')
 with open(SECRETS_PATH + "graph-painter/config.json") as f:
     config = json.load(f)
 
+
 class GraphPainterTest(unittest.TestCase):
 
     host = 'localhost'
@@ -55,3 +56,4 @@ class GraphPainterTest(unittest.TestCase):
             # read_image(res.image)
             t1 = time.time()
             pprint(f"Run {i} took {t1 - t0}s")
+

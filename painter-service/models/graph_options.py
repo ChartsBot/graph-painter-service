@@ -11,8 +11,8 @@ class GraphOption(pydantic.BaseModel):
     theme_name: str = 'dark'
     chain_name: str = 'eth'
     theme: GraphTheme = None
-    boillinger_bands: bool = False
-    fibonnaci_bands: bool = False
+    bollinger_bands: bool = False
+    fibonacci_bands: bool = False
     rsi: bool = False
     average: bool = False
     finance: bool = False

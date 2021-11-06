@@ -4,7 +4,7 @@ syntax = "proto3";
 // The file handler service definition.
 service GraphPainterService {
   // Sends a greeting
-  rpc Greet (SayHelloMessage) returns (SayHelloMessage) {}
+  rpc GreetGP (SayHelloGPMessage) returns (SayHelloGPMessage) {}
 
   rpc PaintCandlestick (ChartRequest) returns (ChartResponse) {}
 
@@ -22,7 +22,7 @@ message ChartResponse {
   bytes image = 1;
 }
 
-message SayHelloMessage {
+message SayHelloGPMessage {
   string message = 1;
 }
 

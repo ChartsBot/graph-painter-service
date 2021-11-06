@@ -72,6 +72,73 @@ class GraphPainterTest(unittest.TestCase):
         chart_img = gp.paint_candlestick()
         chart_img.save(self.file_path)
 
+    def test_with_options_avg_chart_simple(self):
+        opt = GraphOption(upper_part_text='This is a test',
+                          fibonacci_bands=True)
+        gp = GraphPainter(datas=self.coll_single_trade_point,
+                          token_info=self.ti,
+                          options=opt)
+        chart_img = gp.paint_simple_chart()
+        chart_img.save(self.file_path)
+
+    def test_with_options_rsi(self):
+        opt = GraphOption(upper_part_text='This is a test',
+                          rsi=True)
+        gp = GraphPainter(datas=self.coll_ohcl,
+                          token_info=self.ti,
+                          options=opt)
+        chart_img = gp.paint_candlestick()
+        chart_img.save(self.file_path)
+
+    def test_with_options_bb(self):
+        opt = GraphOption(upper_part_text='This is a test',
+                          bollinger_bands=True)
+        gp = GraphPainter(datas=self.coll_ohcl,
+                          token_info=self.ti,
+                          options=opt)
+        chart_img = gp.paint_candlestick()
+        chart_img.save(self.file_path)
+
+    def test_with_options_fibo(self):
+        opt = GraphOption(upper_part_text='This is a test',
+                          fibonacci_bands=True)
+        gp = GraphPainter(datas=self.coll_ohcl,
+                          token_info=self.ti,
+                          options=opt)
+        chart_img = gp.paint_candlestick()
+        chart_img.save(self.file_path)
+
+    def test_with_options_average(self):
+        opt = GraphOption(upper_part_text='This is a test',
+                          average=True)
+        gp = GraphPainter(datas=self.coll_ohcl,
+                          token_info=self.ti,
+                          options=opt)
+        chart_img = gp.paint_candlestick()
+        chart_img.save(self.file_path)
+
+    def test_with_options_finance(self):
+        opt = GraphOption(upper_part_text='This is a test',
+                          finance=True)
+        gp = GraphPainter(datas=self.coll_ohcl,
+                          token_info=self.ti,
+                          options=opt)
+        chart_img = gp.paint_candlestick()
+        chart_img.save(self.file_path)
+
+    def test_with_options_all(self):
+        opt = GraphOption(upper_part_text='This is a test',
+                          bollinger_bands=True,
+                          fibonacci_bands=True,
+                          rsi=True,
+                          average=True,
+                          finance=True)
+        gp = GraphPainter(datas=self.coll_ohcl,
+                          token_info=self.ti,
+                          options=opt)
+        chart_img = gp.paint_candlestick()
+        chart_img.save(self.file_path)
+
     def test_if_speed_gets_better(self):
         """Just checking that the first time that we cast a GraphOption() object is slower than the other times."""
         for i in range(1, 10):

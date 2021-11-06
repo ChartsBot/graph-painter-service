@@ -6,6 +6,7 @@ import pydantic
 class TokenInfo(pydantic.BaseModel):
     name: str
     currency_against: str = '$'
+    volume_currency: str = '$'
     ticker: Optional[str] = None
     address: Optional[str] = None
     holders: Optional[int] = None

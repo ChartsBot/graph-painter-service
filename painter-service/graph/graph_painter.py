@@ -5,6 +5,7 @@ from typing import Union
 import plotly.graph_objects as go
 import plotly.io as pio
 from PIL import Image, ImageDraw, ImageOps
+from graph.finance_util import fibonnaci_bands, bollinger_bands, moving_average, calculate_rsi
 from models.graph_options import GraphOption
 from models.price_point import CollectionSingleTradePoint, CollectionOhcl
 from models.token_info import TokenInfo
@@ -48,10 +49,12 @@ class GraphPainter:
                             width=1600,
                             height=900,
                             xaxis=dict(rangeslider=dict(visible=False)),
-                            yaxis2=dict(domain=[0.0, 1], title=self.token_info.name + ' price ($)', side='right'),
+                            yaxis2=dict(domain=[0.0, 1],
+                                        title=f"{self.token_info.name} price ({self.token_info.currency_against})",
+                                        side='right'),
                             showlegend=False,
                             margin=dict(t=15, b=15, r=15, l=15))
-
+        chart = self._process_options(chart)
         img = pio.to_image(fig=chart, scale=2)
         return io.BytesIO(img)
 
@@ -97,11 +100,11 @@ class GraphPainter:
             yaxis=dict(
                 domain=[0, 0.19],
                 showticklabels=True,
-                title='Volume ($)',
+                title=f"Volume ({self.token_info.volume_currency}])",
                 side='right'),
             yaxis2=dict(
                 domain=[0.2, 1],
-                title=self.token_info.name + ' price ($)',
+                title=f"{self.token_info.name}  price ({self.token_info.currency_against})",
                 side='right'),
             showlegend=False,
             margin=dict(
@@ -110,6 +113,7 @@ class GraphPainter:
                 r=15,
                 l=15)
         )
+        chart = self._process_options(chart)
         img = pio.to_image(fig=chart, scale=2)
         return io.BytesIO(img)
 
@@ -168,3 +172,69 @@ class GraphPainter:
             img_up = self._generate_text_banner()
             return self._concatenate_two_images(img_up, image)
         return image
+
+    def _process_options(self, chart):
+        """Adds the options passed in the graph options."""
+        if self.options.bollinger_bands:
+            bbs = bollinger_bands(self.datas.highs(), self.datas.lows(), self.datas.closes())
+            chart.update_layout(showlegend=True)
+            for bb in bbs:
+                chart.add_scatter(x=self.datas.dates(), y=bb[0][0].to_list(), type='scatter', yaxis='y2',
+                                  line=bb[1], name=bb[3],
+                                  marker=dict(color='#ccc'), hoverinfo='none',
+                                  legendgroup='Bollinger Bands', showlegend=bb[2])
+
+        if self.options.fibonacci_bands:
+            annotations = []
+            match self.datas:
+                case CollectionOhcl():
+                    fibo_bands = fibonnaci_bands(self.datas.closes())
+                case CollectionSingleTradePoint():
+                    fibo_bands = fibonnaci_bands(self.datas.values())
+            # fig['layout']['showlegend'] = True
+            for res in fibo_bands:
+                chart.add_scatter(x=self.datas.dates(), y=res[0][0].to_list(), type='scatter', yaxis='y2',
+                                  line=res[1], name=res[2],
+                                  marker=dict(color='#ccc'), hoverinfo='none',
+                                  legendgroup='Fibo Bands', showlegend=False)
+                annotations.append(dict(xref='paper', x=0.0, y=res[0][0].to_list()[0],
+                                        xanchor='right', yanchor='middle', yref='y2',
+                                        text=res[2],
+                                        font=dict(family='Arial',
+                                                  size=16),
+                                        showarrow=False))
+            chart.update_layout(margin=dict(t=15, b=15, r=15, l=100),
+                                annotations=annotations)
+
+        if self.options.rsi:
+            rsis, lower, upper = calculate_rsi(self.datas.closes())
+            chart.update_layout(yaxis=dict(domain=[0, 0.14], title='Volume ($)', side='right'),
+                                yaxis3=dict(domain=[0.15, 0.29], showticklabels=True, title='RSI', side='right'),
+                                yaxis2=dict(domain=[0.3, 1], title=f"{self.token_info.name} price ({self.token_info.currency_against})", side='right'))
+            chart.add_scatter(x=self.datas.dates(), y=rsis, mode='lines',
+                              marker=dict(color='#E377C2'),
+                              yaxis='y3', name='RSI')
+            chart.add_scatter(x=self.datas.dates(), y=lower, mode='lines',
+                              marker=dict(color='rgba(13, 55, 13, 0.9)'),
+                              yaxis='y3', name='RSI')
+            chart.add_scatter(x=self.datas.dates(), y=upper, mode='lines',
+                              marker=dict(color='rgba(100, 0, 0, 0.9)'),
+                              yaxis='y3', name='RSI')
+        if self.options.average:
+            mv_y = moving_average(self.datas.closes())
+            mv_x = list(self.datas.dates())
+
+            # Clip the ends
+            mv_x = mv_x[5:-5]
+            mv_y = mv_y[5:-5]
+
+            chart.add_scatter(x=mv_x, y=mv_y, mode='lines',
+                              line=dict(width=2),
+                              marker=dict(color='#E377C2'),
+                              yaxis='y2', name='Moving Average')
+
+        if self.options.finance:
+            chart.update_layout(xaxis=dict(rangeslider=dict(visible=False), type='category', dtick=6,
+                                           tickformat="%b-%d-%H-%M"))
+
+        return chart

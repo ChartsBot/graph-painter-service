@@ -15,10 +15,10 @@ class GraphPainterServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.Greet = channel.unary_unary(
-                '/GraphPainterService/Greet',
-                request_serializer=graphPainter__pb2.SayHelloMessage.SerializeToString,
-                response_deserializer=graphPainter__pb2.SayHelloMessage.FromString,
+        self.GreetGP = channel.unary_unary(
+                '/GraphPainterService/GreetGP',
+                request_serializer=graphPainter__pb2.SayHelloGPMessage.SerializeToString,
+                response_deserializer=graphPainter__pb2.SayHelloGPMessage.FromString,
                 )
         self.PaintCandlestick = channel.unary_unary(
                 '/GraphPainterService/PaintCandlestick',
@@ -36,7 +36,7 @@ class GraphPainterServiceServicer(object):
     """The file handler service definition.
     """
 
-    def Greet(self, request, context):
+    def GreetGP(self, request, context):
         """Sends a greeting
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -58,10 +58,10 @@ class GraphPainterServiceServicer(object):
 
 def add_GraphPainterServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'Greet': grpc.unary_unary_rpc_method_handler(
-                    servicer.Greet,
-                    request_deserializer=graphPainter__pb2.SayHelloMessage.FromString,
-                    response_serializer=graphPainter__pb2.SayHelloMessage.SerializeToString,
+            'GreetGP': grpc.unary_unary_rpc_method_handler(
+                    servicer.GreetGP,
+                    request_deserializer=graphPainter__pb2.SayHelloGPMessage.FromString,
+                    response_serializer=graphPainter__pb2.SayHelloGPMessage.SerializeToString,
             ),
             'PaintCandlestick': grpc.unary_unary_rpc_method_handler(
                     servicer.PaintCandlestick,
@@ -85,7 +85,7 @@ class GraphPainterService(object):
     """
 
     @staticmethod
-    def Greet(request,
+    def GreetGP(request,
             target,
             options=(),
             channel_credentials=None,
@@ -95,9 +95,9 @@ class GraphPainterService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/GraphPainterService/Greet',
-            graphPainter__pb2.SayHelloMessage.SerializeToString,
-            graphPainter__pb2.SayHelloMessage.FromString,
+        return grpc.experimental.unary_unary(request, target, '/GraphPainterService/GreetGP',
+            graphPainter__pb2.SayHelloGPMessage.SerializeToString,
+            graphPainter__pb2.SayHelloGPMessage.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
