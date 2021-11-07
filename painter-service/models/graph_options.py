@@ -18,6 +18,7 @@ class GraphOption(pydantic.BaseModel):
     finance: bool = False
     upper_part_text: Optional[str] = None
     watermark: Optional[str] = None
+    export_type: str = 'JPEG'
 
     def __init__(self, **data: Any):
         super().__init__(**data)

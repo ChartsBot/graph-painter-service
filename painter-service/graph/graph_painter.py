@@ -174,7 +174,7 @@ class GraphPainter:
         return image
 
     def _process_options(self, chart):
-        """Adds the options passed in the graph options."""
+        """Adds the options passed in the graph options to the given plotly figure."""
         if self.options.bollinger_bands:
             bbs = bollinger_bands(self.datas.highs(), self.datas.lows(), self.datas.closes())
             chart.update_layout(showlegend=True)

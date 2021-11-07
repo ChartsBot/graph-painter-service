@@ -151,3 +151,15 @@ class GraphPainterTest(unittest.TestCase):
             chart_img = Image.open(res)
             t1 = time.time()
             pprint(f"Elapsed time for run {i}: {t1 - t0}")
+
+    def test_paint_candlestick_repetition(self):
+        """Paint a full candlestick"""
+        for i in range(1, 10):
+            opt = GraphOption(upper_part_text="Hello")
+            gp = GraphPainter(datas=self.coll_ohcl,
+                              token_info=self.ti,
+                              options=opt)
+            t0 = time.time()
+            res = gp.paint_candlestick()
+            t1 = time.time()
+            pprint(f"Elapsed time for run {i}: {t1 - t0}")
