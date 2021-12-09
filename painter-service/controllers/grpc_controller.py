@@ -27,12 +27,12 @@ def process_chart_request(request, req_type: PaintingType):
             img = gp.paint_candlestick()
         case PaintingType.CHART:
             img = gp.paint_simple_chart()
-    logging.info(f"Took {time.time() - t0}s to paint the chart.")
+    logging.debug(f"Took {time.time() - t0}s to paint the chart.")
 
     with io.BytesIO() as output:
         img.save(output, options.export_type)
-        logging.info(f"Took {time.time() - t0}s to process the chart.")
         data = output.getvalue()
+    logging.info(f"Took {time.time() - t0}s to process the chart.")
     return data
 
 

@@ -40,20 +40,48 @@ class GraphPainter:
         The theme will follow the one given in the graph options."""
         chart = go.Figure()
 
+        with_volume = self.datas.volumes()[0]
+
         # chart.add_scatter(x=datas.dates(), y=datas.values(), yaxis='y2', line=go.scatter.Line(color='#636EFA'))
-        chart.add_scatter(x=self.datas.dates(), y=self.datas.values(), yaxis='y2', line=go.scatter.Line(color='#8246e5'))
-        chart.update_layout(template=self.options.theme.layout_template,
-                            annotations=self.options.generate_watermark(),
-                            plot_bgcolor=None,
-                            autosize=False,
-                            width=1600,
-                            height=900,
-                            xaxis=dict(rangeslider=dict(visible=False)),
-                            yaxis2=dict(domain=[0.0, 1],
-                                        title=f"{self.token_info.name} price ({self.token_info.currency_against})",
-                                        side='right'),
-                            showlegend=False,
-                            margin=dict(t=15, b=15, r=15, l=15))
+        # if self.datas.volumes()
+        chart.add_scatter(x=self.datas.dates(), y=self.datas.values(), yaxis='y2',
+                          line=go.scatter.Line(color='#8246e5'))
+
+        chart.update_layout(
+            template=self.options.theme.layout_template,
+            annotations=self.options.generate_watermark(),
+            plot_bgcolor=None,
+            autosize=False,
+            width=1600,
+            height=900,
+            xaxis=dict(rangeslider=dict(visible=False)),
+            yaxis2=dict(domain=[0.0, 1],
+                        title=f"{self.token_info.name} price ({self.token_info.currency_against})",
+                        side='right'),
+            showlegend=False,
+            margin=dict(t=15, b=15, r=15, l=15))
+
+        if with_volume:
+            chart.add_bar(
+                x=self.datas.dates(),
+                y=self.datas.volumes(),
+                yaxis='y',
+                marker=dict(),
+                name='Volume'
+            )
+
+            chart.update_layout(
+                yaxis=dict(
+                    domain=[0, 0.19],
+                    showticklabels=True,
+                    title=f"Volume ({self.token_info.volume_currency})",
+                    side='right'),
+                yaxis2=dict(
+                    domain=[0.2, 1],
+                    title=f"{self.token_info.name} price ({self.token_info.currency_against})",
+                    side='right'),
+            )
+
         chart = self._process_options(chart)
         img = pio.to_image(fig=chart, scale=2)
         return io.BytesIO(img)
@@ -100,7 +128,7 @@ class GraphPainter:
             yaxis=dict(
                 domain=[0, 0.19],
                 showticklabels=True,
-                title=f"Volume ({self.token_info.volume_currency}])",
+                title=f"Volume ({self.token_info.volume_currency})",
                 side='right'),
             yaxis2=dict(
                 domain=[0.2, 1],
@@ -210,7 +238,9 @@ class GraphPainter:
             rsis, lower, upper = calculate_rsi(self.datas.closes())
             chart.update_layout(yaxis=dict(domain=[0, 0.14], title='Volume ($)', side='right'),
                                 yaxis3=dict(domain=[0.15, 0.29], showticklabels=True, title='RSI', side='right'),
-                                yaxis2=dict(domain=[0.3, 1], title=f"{self.token_info.name} price ({self.token_info.currency_against})", side='right'))
+                                yaxis2=dict(domain=[0.3, 1],
+                                            title=f"{self.token_info.name} price ({self.token_info.currency_against})",
+                                            side='right'))
             chart.add_scatter(x=self.datas.dates(), y=rsis, mode='lines',
                               marker=dict(color='#E377C2'),
                               yaxis='y3', name='RSI')

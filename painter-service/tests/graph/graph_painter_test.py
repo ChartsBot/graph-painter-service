@@ -12,15 +12,21 @@ from models.graph_options import GraphOption
 from models.price_point import CollectionSingleTradePoint, CollectionOhcl
 from models.token_info import TokenInfo
 from tests.test_elements import EXAMPLE_JSON_COLLECTION_SINGLE_TRADE_POINT, EXAMPLE_JSON_COLLECTION_OHCL, \
-    EXAMPLE_TOKEN_INFO
+    EXAMPLE_TOKEN_INFO, EXAMPLE_JSON_COLLECTION_OHCL_CRO, EXAMPLE_JSON_COLLECTION_SINGLE_TRADE_POINT_VOLUME
 
 
 class GraphPainterTest(unittest.TestCase):
     json_coll_single_points_class = json.loads(EXAMPLE_JSON_COLLECTION_SINGLE_TRADE_POINT)
     coll_single_trade_point = CollectionSingleTradePoint(**json_coll_single_points_class)
 
+    json_coll_single_points_class_vol = json.loads(EXAMPLE_JSON_COLLECTION_SINGLE_TRADE_POINT_VOLUME)
+    coll_single_trade_point_volume = CollectionSingleTradePoint(**json_coll_single_points_class_vol)
+
     json_coll_ohcl = json.loads(EXAMPLE_JSON_COLLECTION_OHCL)
     coll_ohcl = CollectionOhcl(**json_coll_ohcl)
+
+    json_coll_ohcl_cro = json.loads(EXAMPLE_JSON_COLLECTION_OHCL_CRO)
+    coll_ohcl_cro = CollectionOhcl(**json_coll_ohcl_cro)
 
     ti: TokenInfo = EXAMPLE_TOKEN_INFO
 
@@ -29,6 +35,17 @@ class GraphPainterTest(unittest.TestCase):
     def test_painting_collection_single_points(self):
         opt = GraphOption()
         gp = GraphPainter(datas=self.coll_single_trade_point,
+                          token_info=self.ti,
+                          options=opt)
+
+        res = gp._generate_chart()
+        chart_img = Image.open(res)
+        # chart_img.show()
+        chart_img.save(self.file_path)
+
+    def test_painting_collection_single_points_with_volume(self):
+        opt = GraphOption()
+        gp = GraphPainter(datas=self.coll_single_trade_point_volume,
                           token_info=self.ti,
                           options=opt)
 
@@ -163,3 +180,11 @@ class GraphPainterTest(unittest.TestCase):
             res = gp.paint_candlestick()
             t1 = time.time()
             pprint(f"Elapsed time for run {i}: {t1 - t0}")
+
+    def test_painting_from_cro(self):
+        opt = GraphOption(upper_part_text="Hello")
+        gp = GraphPainter(datas=self.coll_ohcl_cro,
+                          token_info=self.ti,
+                          options=opt)
+        res = gp.paint_candlestick()
+        res.show()
